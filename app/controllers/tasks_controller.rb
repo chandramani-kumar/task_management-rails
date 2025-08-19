@@ -1,0 +1,61 @@
+# In app/controllers/tasks_controller.rb
+class TasksController < ApplicationController
+    before_action :set_task, only: [:show, :update, :destroy]
+  
+    # GET /tasks
+    def index
+        @tasks = Task.where(deleted_at: nil).order(created_at: :desc)
+        render json: @tasks.to_json(include: :comments)
+      end
+  
+    # GET /tasks/1
+    def show
+      render json: @task
+    end
+  
+    # POST /tasks
+    def create
+      @task = Task.new(task_params)
+  
+      if @task.save
+        render json: @task, status: :created, location: @task
+      else
+        render json: @task.errors, status: :unprocessable_entity
+      end
+    end
+  
+    # PATCH/PUT /tasks/1
+    def update
+      if @task.update(task_params)
+        render json: @task
+      else
+        render json: @task.errors, status: :unprocessable_entity
+      end
+    end
+  
+    # DELETE /tasks/1 (This performs a soft delete)
+    def destroy
+      @task.update(deleted_at: Time.current)
+      head :no_content
+    end
+  
+    private
+      def set_task
+        @task = Task.find(params[:id])
+      end
+  
+      # Update this to include all your schema's fields
+      def task_params
+        params.require(:task).permit(
+          :number, 
+          :title, 
+          :status, 
+          :priority, 
+          :assignee, 
+          :description, 
+          :description_rich_text, 
+          :due_date
+        )
+      end
+  end
+  
