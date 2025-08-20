@@ -30,8 +30,8 @@ A RESTful API for managing tasks and comments built with Ruby on Rails. This app
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/task_management_app.git
-cd task_management_app
+git clone https://github.com/yourusername/task_management-rails.git
+cd task_management-rails
 ```
 
 ### 2. Install Dependencies
